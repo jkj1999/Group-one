@@ -76,6 +76,7 @@ string UI::read_passage()
 		passage += word+paragraph+'\n';
 		word = getchar();
 	}
+	passage.pop_back();//去掉最后的回车
 	return passage;
 }
 void UI::find_difference()

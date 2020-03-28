@@ -143,7 +143,7 @@ void chain::keymatching() {
 		cout << "您输入的关键词组仅能匹配一篇文章" << endl;
 	else if (valuenum[2] == 0)
 		cout << "您输入的关键词组仅能匹配两篇文章" << endl;
-	for (int temp_i = 0;temp_i < 3 && valuenum[temp_i] != 0;temp_i++) {
+	for (int temp_i = 0;temp_i < 3 && valuenum[temp_i] > 0;temp_i++) {
 		int temp_new = valueindex[temp_i];
 		int i = 0;
 		for (temp_head = head;i != temp_new;temp_head = temp_head->next)
