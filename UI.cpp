@@ -22,6 +22,7 @@ void UI::footer()
 }
 void UI::main_window()
 {
+	default_set();
 	while(1)
 	{
 		system("cls");
@@ -95,4 +96,8 @@ void UI::key_search()
 	system("cls");
 	block_chain.keymatching();
 	_getch();
+}
+void UI::default_set()
+{
+	block_chain.addNodeFromFile();
 }

@@ -7,6 +7,7 @@ class UI
 {
 public:
 	chain block_chain;
+	void default_set();
 	void header();
 	void footer();
 	void store_news();//存储新闻

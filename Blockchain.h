@@ -3,6 +3,7 @@
 #include <iostream>
 #include "MD5.h"
 #include "hashTree.h"
+#include <fstream>
 using namespace std;
 class node
 {
@@ -25,4 +26,5 @@ public:
 	string retMd5(string info);
 	void findChanged(string passage, string time);//找到篡改段落
 	void keymatching();            //关键字查找
+	void addNodeFromFile();//由文件读入新闻
 };

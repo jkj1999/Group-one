@@ -156,3 +156,22 @@ void chain::keymatching() {
 
 	}
 }
+void chain::addNodeFromFile()
+{
+	int news_number = 205;
+	for(int m=1;m<=news_number;m++)
+	{
+		system("cls");
+		cout<<"从文件中读取数据中..."<<endl;
+		cout<<"当前读取文件数:"<<m;
+		string file_name = "News/"+to_string(m)+".txt";
+		ifstream in(file_name);
+		string time,passage,temp;
+		getline(in,time);
+		while(getline(in,temp))
+		{
+			passage += temp+'\n';
+		}
+		addNode(passage,time);		
+	}
+}
