@@ -10,12 +10,12 @@ public:
 	void default_set();
 	void header();
 	void footer();
-	void store_news();//å­˜å‚¨æ–°é—»
-	void main_window();//ä¸»ç•Œé¢
-	void find_difference();//ç¯¡æ”¹æ£€æŸ¥
-	void key_search();//å…³é”®å­—æŸ¥è¯¢
+	void store_news();//´æ´¢ĞÂÎÅ
+	void main_window();//Ö÷½çÃæ
+	void find_difference();//´Û¸Ä¼ì²é
+	void key_search();//¹Ø¼ü×Ö²éÑ¯
 	int main_width;
 	int main_height;
-	string read_passage();//è¯»å–è¾“å…¥æ–‡ç« 
+	string read_passage();//¶ÁÈ¡ÊäÈëÎÄÕÂ
 	UI();
 };

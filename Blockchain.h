@@ -1,17 +1,27 @@
 #pragma once
 
 #include <iostream>
-#include "MD5.h"
+#pragma once
+
+#include "md5.h"
 #include "hashTree.h"
 #include <fstream>
+#include <iomanip>
+#include <thread>
+#include <queue>
 using namespace std;
+struct read_for_thread
+{
+	string time;
+	string passage;
+};
 class node
 {
 public:
 	node(string info, string time);
-	hashTree htree;//æ­¤ç»“ç‚¹çš„å“ˆå¸Œæ ‘
-	string preHashCode;//ä¸Šä¸€ä¸ªå“ˆå¸Œç»“ç‚¹çš„å“ˆå¸Œå€¼
-	string timeStamp;//æ—¶é—´æˆ³
+	hashTree htree;//´Ë½áµãµÄ¹şÏ£Ê÷
+	string preHashCode;//ÉÏÒ»¸ö¹şÏ£½áµãµÄ¹şÏ£Öµ
+	string timeStamp;//Ê±¼ä´Á
 	node* next;
 };
 class chain
@@ -19,12 +29,14 @@ class chain
 	
 public:
 	node* head, * rear;
-	MD5 md5;//å“ˆå¸Œå‡½æ•°
+	MD5_hash md5;//¹şÏ£º¯Êı
 	chain() { head = rear = NULL; }
-	void addNode(string info, string time);//æ·»åŠ åŒºå—ç»“ç‚¹
-	void goOverChain();//debugç”¨
+	void addNode(string info, string time);//Ìí¼ÓÇø¿é½áµã
+	void goOverChain();//debugÓÃ
 	string retMd5(string info);
-	void findChanged(string passage, string time);//æ‰¾åˆ°ç¯¡æ”¹æ®µè½
-	void keymatching();            //å…³é”®å­—æŸ¥æ‰¾
-	void addNodeFromFile();//ç”±æ–‡ä»¶è¯»å…¥æ–°é—»
+	void findChanged(string passage, string time);//ÕÒµ½´Û¸Ä¶ÎÂä
+	void keymatching();            //¹Ø¼ü×Ö²éÕÒ
+	void addNodeFromFile();//ÓÉÎÄ¼ş¶ÁÈëĞÂÎÅ
+	void addNode_from_queue(queue<read_for_thread>& info_queue);
+	static void addNodeFromFile_thread(int begin,int end,queue<read_for_thread>* info_store);
 };

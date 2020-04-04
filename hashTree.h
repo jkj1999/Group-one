@@ -1,8 +1,9 @@
-#ifndef _hashTree_H
-#define _hashTree_H
+#pragma once
+// #ifndef _hashTree_H
+// #define _hashTree_H
 
 #include <iostream>
-#include "MD5.h"
+#include "md5.h"
 #include <queue>
 using namespace std;
 class store_data_node
@@ -29,7 +30,8 @@ class hashTree
 public:
 	hashNode* root;
 	store_data_node *head;//底层的头结点,便于遍历
-	MD5 md5;
+	MD5_hash md5;
+	string retMd5(string info);
 	hashTree() { root = NULL; head = NULL;}
 	void createTree(string info);
 	queue<hashNode*>* createFloor(queue<string>* store);//创建最底层：将字符串转哈希
@@ -40,4 +42,4 @@ public:
 	queue<int>* findChanged(hashNode* example, hashNode* mayChanged);//找出不一致的段落,注意：段落由0开始
 	int isLeaf(hashNode* node);//判断是否是叶子结点
 };
-#endif
+//#endif

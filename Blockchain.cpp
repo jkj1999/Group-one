@@ -1,4 +1,7 @@
-ï»¿#include "Blockchain.h"
+#pragma once
+
+#include "Blockchain.h"
+
 node::node(string info, string time)
 {
 	htree.createTree(info);
@@ -24,7 +27,11 @@ void chain::addNode(string info, string time)
 }
 string chain::retMd5(string info)
 {
-	return md5.encrypt(info);
+	char Message[10000] = { 0 };
+    const char* temp = info.c_str();
+    for (int m = 0;m < strlen(temp);m++)
+        Message[m] = temp[m];
+    return md5.get_md5_code(Message);
 }
 void chain::goOverChain()
 {
@@ -32,6 +39,7 @@ void chain::goOverChain()
 	while (temp)
 	{
 		cout << temp->htree.root->hashCode << endl << endl;
+		//cout<<temp->timeStamp<<endl<<endl;
 		temp = temp->next;
 	}
 }
@@ -48,45 +56,45 @@ void chain::findChanged(string passage, string time)
 	position.createTree(passage);
 	queue<int>* changeParagraph = temp->htree.findChanged(position.root,temp->htree.root);
 	if (!changeParagraph)
-		cout << "å®Œå…¨ä¸€è‡´"<<endl;
+		cout << "ÍêÈ«Ò»ÖÂ"<<endl;
 	else
 	{
 		while (changeParagraph->size())
 		{
-			cout <<"æ®µè½"<< changeParagraph->front() + 1<<" ";
+			cout <<"¶ÎÂä"<< changeParagraph->front() + 1<<" ";
 			changeParagraph->pop();
 		}
-		cout<<"å‘ç”Ÿç¯¡æ”¹"<<endl;
+		cout<<"·¢Éú´Û¸Ä"<<endl;
 	}
 }
 void chain::keymatching() {
 	int keys_num;
-	int valueindex[3] = { -1,-1,-1 };         //å…³é”®è¯å‡ºçŽ°æ¬¡æ•°å‰ä¸‰çš„æ–‡ç« çš„ä¸‹æ ‡ 
-	int valuenum[3] = { -1,-1,-1 };           //å…³é”®è¯å‡ºçŽ°æ¬¡æ•° 
-	cout << "è¯·è¾“å…¥æ‚¨æƒ³è¦æ£€ç´¢çš„å…³é”®è¯ä¸ªæ•°" << endl;
+	int valueindex[3] = { -1,-1,-1 };         //¹Ø¼ü´Ê³öÏÖ´ÎÊýÇ°ÈýµÄÎÄÕÂµÄÏÂ±ê 
+	int valuenum[3] = { -1,-1,-1 };           //¹Ø¼ü´Ê³öÏÖ´ÎÊý 
+	cout << "ÇëÊäÈëÄúÏëÒª¼ìË÷µÄ¹Ø¼ü´Ê¸öÊý" << endl;
 	cin >> keys_num;
-	cout << "è¯·è¾“å…¥ä½ æƒ³è¦æŸ¥è¯¢çš„å…³é”®è¯(ä»¥åŠè§’é€—å·ä¸ºé—´éš”ï¼Œå›žè½¦ä¸ºç»“æŸ)" << endl;
+	cout << "ÇëÊäÈëÄãÏëÒª²éÑ¯µÄ¹Ø¼ü´Ê(ÒÔ°ë½Ç¶ººÅÎª¼ä¸ô£¬»Ø³µÎª½áÊø)" << endl;
 	string keys;
 	cin >> keys;
 	node* temp_head = head;
-	int news_num = 0;                         //è®°å½•æ–‡ç« ä¸‹æ ‡(èµ·å§‹ä¸º0)
-	for (;temp_head != NULL;temp_head = temp_head->next) {      //æ±‚æ¯ç¯‡æ–‡ç« çš„å…³é”®è¯ä¸ªæ•°
-		store_data_node* temp_data = temp_head->htree.head;     //æŒ‡å‘åº•å±‚ç»“ç‚¹
+	int news_num = 0;                         //¼ÇÂ¼ÎÄÕÂÏÂ±ê(ÆðÊ¼Îª0)
+	for (;temp_head != NULL;temp_head = temp_head->next) {      //ÇóÃ¿ÆªÎÄÕÂµÄ¹Ø¼ü´Ê¸öÊý
+		store_data_node* temp_data = temp_head->htree.head;     //Ö¸Ïòµ×²ã½áµã
 		int count = 0;
-		for (;temp_data != NULL;temp_data = temp_data->right) {       //å¾—åˆ°count
+		for (;temp_data != NULL;temp_data = temp_data->right) {       //µÃµ½count
 			int temp_keynum = keys_num;
 			int keyindex = 0;
-			for (;temp_keynum > 0;temp_keynum--) {                         //åˆ†åˆ«æ±‚temp_keynumä¸ªå…³é”®å­—çš„ä¸ªæ•° 
+			for (;temp_keynum > 0;temp_keynum--) {                         //·Ö±ðÇótemp_keynum¸ö¹Ø¼ü×ÖµÄ¸öÊý 
 				//cout << count << endl;
 				int keylen = 0;
-				for (;keys[keylen + keyindex] != '\0' && keys[keylen + keyindex] != ',';keylen++);      //æ±‚å­—ç¬¦ä¸²keyçš„é•¿åº¦
-				int index = 0, wordlen = 0;           //indexæ˜¯æ–‡ç« å½“å‰ä½ç½®ï¼Œcountæ˜¯å‡ºçŽ°æ¬¡æ•°ï¼Œwordlenæ˜¯æ–‡ç« ä¸­æŒ‡å‘çš„å•è¯é•¿åº¦
+				for (;keys[keylen + keyindex] != '\0' && keys[keylen + keyindex] != ',';keylen++);      //Çó×Ö·û´®keyµÄ³¤¶È
+				int index = 0, wordlen = 0;           //indexÊÇÎÄÕÂµ±Ç°Î»ÖÃ£¬countÊÇ³öÏÖ´ÎÊý£¬wordlenÊÇÎÄÕÂÖÐÖ¸ÏòµÄµ¥´Ê³¤¶È
 				while (temp_data->data[index] != '\0') {
 					wordlen = 0;
-					bool yn;                            //å•è¯ä¸Žå…³é”®è¯æ˜¯å¦ç›¸ç­‰ 
-					while (temp_data->data[index] == ' '|| temp_data->data[index] == ','|| temp_data->data[index] == '.'|| temp_data->data[index] == '\''|| temp_data->data[index] == '\"'|| temp_data->data[index] == '?' || temp_data->data[index] == '!')            //è¿‡æ»¤ç©ºæ ¼ 
+					bool yn;                            //µ¥´ÊÓë¹Ø¼ü´ÊÊÇ·ñÏàµÈ 
+					while (temp_data->data[index] == ' '|| temp_data->data[index] == ','|| temp_data->data[index] == '.'|| temp_data->data[index] == '\''|| temp_data->data[index] == '\"'|| temp_data->data[index] == '?' || temp_data->data[index] == '!')            //¹ýÂË¿Õ¸ñ 
 						index++;
-					while (temp_data->data[index + wordlen] != '\0' && temp_data->data[index + wordlen] != ' ' && temp_data->data[index+wordlen] != ',' && temp_data->data[index+wordlen] != '.' && temp_data->data[index + wordlen] != '\'' && temp_data->data[index + wordlen] != '\"' && temp_data->data[index + wordlen] != '?' && temp_data->data[index + wordlen] != '!')    //wordlenæ±‚å•è¯é•¿åº¦(å¯ä»¥è€ƒè™‘ä¸¤ä¸ªä¸¤ä¸ªç›¸åŠ )
+					while (temp_data->data[index + wordlen] != '\0' && temp_data->data[index + wordlen] != ' ' && temp_data->data[index+wordlen] != ',' && temp_data->data[index+wordlen] != '.' && temp_data->data[index + wordlen] != '\'' && temp_data->data[index + wordlen] != '\"' && temp_data->data[index + wordlen] != '?' && temp_data->data[index + wordlen] != '!')    //wordlenÇóµ¥´Ê³¤¶È(¿ÉÒÔ¿¼ÂÇÁ½¸öÁ½¸öÏà¼Ó)
 						wordlen++;
 					if (wordlen != keylen)
 						index += wordlen;
@@ -95,7 +103,7 @@ void chain::keymatching() {
 						int temp_index = index;
 						int worddex = 0;
 						while (worddex < wordlen) {
-							if (temp_data->data[temp_index] != keys[worddex + keyindex]) {       //æœ‰æ”¹
+							if (temp_data->data[temp_index] != keys[worddex + keyindex]) {       //ÓÐ¸Ä
 								yn = false;
 								break;
 							}
@@ -108,7 +116,7 @@ void chain::keymatching() {
 					}
 				}
 				keyindex += keylen;
-				//for (;keys[keyindex] == ' ';keyindex++);  //è¿‡æ»¤å…³é”®å­—ä¸­é—´çš„ç©ºæ ¼ 
+				//for (;keys[keyindex] == ' ';keyindex++);  //¹ýÂË¹Ø¼ü×ÖÖÐ¼äµÄ¿Õ¸ñ 
 				while(keys[keyindex] != '\0' && keys[keyindex] == ',')
 					keyindex++;
 			}
@@ -138,33 +146,51 @@ void chain::keymatching() {
 		news_num += 1;
 	}
 	if (valuenum[0] == 0)
-		cout << "æ‚¨è¾“å…¥çš„å…³é”®è¯ç»„æ— æ³•åŒ¹é…ä»»ä½•æ–‡ç« ï¼Œè¯·æ ¸å¯¹åŽå†æ¬¡è¾“å…¥" << endl;
+		cout << "ÄúÊäÈëµÄ¹Ø¼ü´Ê×éÎÞ·¨Æ¥ÅäÈÎºÎÎÄÕÂ£¬ÇëºË¶ÔºóÔÙ´ÎÊäÈë" << endl;
 	else if (valuenum[1] == 0)
-		cout << "æ‚¨è¾“å…¥çš„å…³é”®è¯ç»„ä»…èƒ½åŒ¹é…ä¸€ç¯‡æ–‡ç« " << endl;
+		cout << "ÄúÊäÈëµÄ¹Ø¼ü´Ê×é½öÄÜÆ¥ÅäÒ»ÆªÎÄÕÂ" << endl;
 	else if (valuenum[2] == 0)
-		cout << "æ‚¨è¾“å…¥çš„å…³é”®è¯ç»„ä»…èƒ½åŒ¹é…ä¸¤ç¯‡æ–‡ç« " << endl;
+		cout << "ÄúÊäÈëµÄ¹Ø¼ü´Ê×é½öÄÜÆ¥ÅäÁ½ÆªÎÄÕÂ" << endl;
 	for (int temp_i = 0;temp_i < 3 && valuenum[temp_i] > 0;temp_i++) {
 		int temp_new = valueindex[temp_i];
 		int i = 0;
 		for (temp_head = head;i != temp_new;temp_head = temp_head->next)
 			i++;
-		cout << "è¯¥æ–‡ç« å…±å«å…³é”®è¯" << valuenum[temp_i] << "ä¸ª" << endl;
+		cout << "¸ÃÎÄÕÂ¹²º¬¹Ø¼ü´Ê" << valuenum[temp_i] << "¸ö" << endl;
 		store_data_node * temp_data_head = temp_head->htree.head;
 		for (;temp_data_head != NULL;temp_data_head = temp_data_head->right)
 			cout << "  " << temp_data_head->data << endl;
-		cout << "å…¨æ–‡è¾“å‡ºå®Œæ¯•" << endl;
+		cout << "È«ÎÄÊä³öÍê±Ï" << endl;
 
 	}
 }
 void chain::addNodeFromFile()
 {
-	int news_number = 205;
-	for(int m=1;m<=news_number;m++)
+	queue<read_for_thread> info_one,info_two,info_three,info_four;
+
+	thread read_thread_one(addNodeFromFile_thread,1,50,&info_one);
+	thread read_thread_two(addNodeFromFile_thread,51,100,&info_two);
+	thread read_thread_three(addNodeFromFile_thread,101,150,&info_three);
+	thread read_thread_four(addNodeFromFile_thread,151,205,&info_four);
+	read_thread_one.join();
+	read_thread_two.join();
+	read_thread_three.join();
+	read_thread_four.join();
+	addNode_from_queue(info_one);
+	addNode_from_queue(info_two);
+	addNode_from_queue(info_three);
+	addNode_from_queue(info_four);
+
+	// goOverChain();
+	// char temp;
+	// cin>>temp;
+}
+void chain:: addNodeFromFile_thread(int begin,int end,queue<read_for_thread>* info_store)
+{
+	for(int m=begin;m<=end;m++)
 	{
-		system("cls");
-		cout<<"ä»Žæ–‡ä»¶ä¸­è¯»å–æ•°æ®ä¸­..."<<endl;
-		cout<<"å½“å‰è¯»å–æ–‡ä»¶æ•°:"<<m;
 		string file_name = "News/"+to_string(m)+".txt";
+		
 		ifstream in(file_name);
 		string time,passage,temp;
 		getline(in,time);
@@ -172,6 +198,18 @@ void chain::addNodeFromFile()
 		{
 			passage += temp+'\n';
 		}
-		addNode(passage,time);		
+		in.close();
+		read_for_thread temp_store;
+		temp_store.time = time;
+		temp_store.passage = passage;
+		info_store->push(temp_store);
+	}
+}
+void chain:: addNode_from_queue(queue<read_for_thread>& info_queue)
+{
+	while(!info_queue.empty())
+	{
+		addNode(info_queue.front().passage,info_queue.front().time);
+		info_queue.pop();
 	}
 }

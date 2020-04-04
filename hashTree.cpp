@@ -27,7 +27,8 @@ void hashTree::createTree(string info)
 		{
 			hashNode* temp = hashQueue->front();
 			hashQueue->pop();
-			string aftMd5 = md5.encrypt(temp->hashCode);
+			//string aftMd5 = md5.encrypt(temp->hashCode);
+			string aftMd5 = retMd5(temp->hashCode);
 			hashNode* newCode = new hashNode(aftMd5);
 			newCode->left = temp;
 			hashQueue->push(newCode);
@@ -63,7 +64,8 @@ queue<hashNode*>* hashTree::createFloor(queue<string>* store)
 	store_data_node*rear=NULL;
 	for (int m = 0;m < size;m++)
 	{
-		string aftMd5 = md5.encrypt(store->front());
+		//string aftMd5 = md5.encrypt(store->front());
+		string aftMd5 = retMd5(store->front());
 		hashNode* temp = new hashNode(aftMd5);
 		temp->paragraph = m;
 		store_data_node * data_store = new store_data_node(store->front());
@@ -86,7 +88,8 @@ queue<hashNode*>* hashTree::createFloor(queue<string>* store)
 }
 hashNode* hashTree::createNode(hashNode* left, hashNode* right)
 {
-	string sumMd5 = md5.encrypt(left->hashCode + right->hashCode);
+	//string sumMd5 = md5.encrypt(left->hashCode + right->hashCode);
+	string sumMd5 = retMd5(left->hashCode + right->hashCode);
 	hashNode* temp = new hashNode(sumMd5);
 	temp->left = left;
 	temp->right = right;
@@ -161,4 +164,12 @@ void hashTree::goOverFloor()
 	{
 		cout<<temp->data<<" ";
 	}
+}
+string hashTree::retMd5(string info)
+{
+	char Message[10000] = { 0 };
+    const char* temp = info.c_str();
+    for (int m = 0;m < strlen(temp);m++)
+        Message[m] = temp[m];
+    return md5.get_md5_code(Message);
 }

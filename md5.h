@@ -1,65 +1,46 @@
-/*
- *   file: md5.hpp
- *   author: Els-y
- *   time: 2017-10-16 21:08:21
-*/
-#ifndef _MD5_H
-#define _MD5_H
+#pragma once
 
-#include <string>
-#include <vector>
-#include <cstring>
+#include <cstdio>
+#include <cstdlib>
 #include <cmath>
+#include <string>
+#include <memory.h>
 #include <iostream>
-#include <bitset>
-using std::string;
-using std::vector;
-using std::bitset;
-using std::cout;
-using std::endl;
-using std::sin;
-using std::abs;
-
-// default little-endian
-class MD5 {
+using namespace std;
+//常量
+class MD5_hash
+{
 public:
-    MD5();
-    ~MD5();
-    string encrypt(string plain);
-    // 输出扩展后的消息
-    void print_buff();
-
-private:
-    // 128 位 MD 缓冲区，md[0...3] = {A, B, C, D}
-    vector<unsigned int> md;
-    // 存储扩展后的消息
-    unsigned char* buffer;
-    // 扩展后的消息长度，以字节为单位
-    unsigned int buffer_len;
-    // 存放 4 个轮函数的数组
-    unsigned int (MD5::* round_funcs[4])(unsigned int, unsigned int, unsigned int);
-
-    // 初始化 MD 缓冲区
-    void init_md();
-    // 填充 padding 和 length
-    void padding(string plain);
-    void clear();
-    void h_md5(int groupid);
-    // 4 个轮函数
-    unsigned int f_rf(unsigned int x, unsigned int y, unsigned int z);
-    unsigned int g_rf(unsigned int x, unsigned int y, unsigned int z);
-    unsigned int h_rf(unsigned int x, unsigned int y, unsigned int z);
-    unsigned int i_rf(unsigned int x, unsigned int y, unsigned int z);
-    // 返回 MD 缓冲区转换后的 string 格式密文 
-    string md2str();
-    // 返回 buffer 中 [pos, pos + 3] 四个字节按照 little-endian 组成的 X
-    unsigned int uchar2uint(int pos);
-    // 返回 unsigned char 对应的十六进制 string
-    string uchar2hex(unsigned char uch);
-    // 返回 val 循环左移　bits 位的值
-    unsigned int cycle_left_shift(unsigned int val, int bits);
-    // 返回第 round 轮迭代中，第 step　步的 X 对应下标
-    int get_x_index(int round, int step);
+    const unsigned int s[4][4] = { {7,12,17,22},{5,9,14,20},{4,11,16,23},{6,10,15,21} };
+    //t[i]是4294967296*abs(sin(i))的整数部分,i的单位是弧度。
+    const unsigned long int t[64] =
+    {
+     0xd76aa478,0xe8c7b756,0x242070db,0xc1bdceee,
+     0xf57c0faf,0x4787c62a,0xa8304613,0xfd469501,
+     0x698098d8,0x8b44f7af,0xffff5bb1,0x895cd7be,
+     0x6b901122,0xfd987193,0xa679438e,0x49b40821,
+     0xf61e2562,0xc040b340,0x265e5a51,0xe9b6c7aa,
+     0xd62f105d,0x02441453,0xd8a1e681,0xe7d3fbc8,
+     0x21e1cde6,0xc33707d6,0xf4d50d87,0x455a14ed,
+     0xa9e3e905,0xfcefa3f8,0x676f02d9,0x8d2a4c8a,
+     0xfffa3942,0x8771f681,0x6d9d6122,0xfde5380c,
+     0xa4beea44,0x4bdecfa9,0xf6bb4b60,0xbebfbc70,
+     0x289b7ec6,0xeaa127fa,0xd4ef3085,0x04881d05,
+     0xd9d4d039,0xe6db99e5,0x1fa27cf8,0xc4ac5665,
+     0xf4292244,0x432aff97,0xab9423a7,0xfc93a039,
+     0x655b59c3,0x8f0ccc92,0xffeff47d,0x85845dd1,
+     0x6fa87e4f,0xfe2ce6e0,0xa3014314,0x4e0811a1,
+     0xf7537e82,0xbd3af235,0x2ad7d2bb,0xeb86d391
+    };
+    //x[i]中来标识i的标签
+    const int label[64] = {
+     0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
+     1,6,11,0,5,10,15,4,9,14,3,8,13,2,7,12,
+     5,8,11,14,1,4,7,10,13,0,3,6,9,12,15,2,
+     0,7,14,5,12,3,10,1,8,15,6,13,4,11,2,9
+    };
+    void Calculation(unsigned long int* a, unsigned long int b, unsigned long int c, unsigned long int d, unsigned long int M,  unsigned long int t, int s, int choice);
+    void MD5Calculation(const unsigned long int M[16], unsigned long int hash[4]);
+    void MD5(char* M, int inputlen, unsigned long int output[4]);
+    string get_md5_code(char *Message);
 };
-
-#endif
