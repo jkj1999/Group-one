@@ -155,7 +155,13 @@ store_data_node::store_data_node(string paragraph)
 string store_data_node::aft_compress(string data)
 {
 	//½øĞĞ¹ş·òÂü±àÂë
-	return data;
+	string cpassage = hfm.compress(data);
+	return cpassage;
+}
+string store_data_node::decompress(string cpassage)
+{
+	string dpassage = hfm.uncompress(cpassage);
+	return dpassage;
 }
 void hashTree::goOverFloor()
 {

@@ -5,6 +5,7 @@
 #include <iostream>
 #include "md5.h"
 #include <queue>
+#include "huffman.h"
 using namespace std;
 class store_data_node
 {
@@ -12,7 +13,9 @@ class store_data_node
 public:
 	string data;
 	string aft_compress(string data);//进行数据压缩,返回压缩后数据
+	string decompress(string cpassage);//解压数据，返回解压后的文章
 	store_data_node* right;
+	HFM hfm;
 	store_data_node(string paragraph);
 };
 class hashNode

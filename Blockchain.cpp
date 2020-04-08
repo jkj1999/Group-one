@@ -79,6 +79,7 @@ void chain::keymatching() {
 	node* temp_head = head;
 	int news_num = 0;                         //记录文章下标(起始为0)
 	for (;temp_head != NULL;temp_head = temp_head->next) {      //求每篇文章的关键词个数
+		cout<<temp_head->timeStamp<<endl;
 		store_data_node* temp_data = temp_head->htree.head;     //指向底层结点
 		int count = 0;
 		for (;temp_data != NULL;temp_data = temp_data->right) {       //得到count
@@ -89,12 +90,13 @@ void chain::keymatching() {
 				int keylen = 0;
 				for (;keys[keylen + keyindex] != '\0' && keys[keylen + keyindex] != ',';keylen++);      //求字符串key的长度
 				int index = 0, wordlen = 0;           //index是文章当前位置，count是出现次数，wordlen是文章中指向的单词长度
-				while (temp_data->data[index] != '\0') {
+				string paragraph = temp_data->decompress(temp_data->data);//将文章解压
+				while (paragraph[index] != '\0') {
 					wordlen = 0;
 					bool yn;                            //单词与关键词是否相等 
-					while (temp_data->data[index] == ' '|| temp_data->data[index] == ','|| temp_data->data[index] == '.'|| temp_data->data[index] == '\''|| temp_data->data[index] == '\"'|| temp_data->data[index] == '?' || temp_data->data[index] == '!')            //过滤空格 
+					while (paragraph[index] == ' '|| paragraph[index] == ','|| paragraph[index] == '.'|| paragraph[index] == '\''|| paragraph[index] == '\"'|| paragraph[index] == '?' || paragraph[index] == '!')            //过滤空格 
 						index++;
-					while (temp_data->data[index + wordlen] != '\0' && temp_data->data[index + wordlen] != ' ' && temp_data->data[index+wordlen] != ',' && temp_data->data[index+wordlen] != '.' && temp_data->data[index + wordlen] != '\'' && temp_data->data[index + wordlen] != '\"' && temp_data->data[index + wordlen] != '?' && temp_data->data[index + wordlen] != '!')    //wordlen求单词长度(可以考虑两个两个相加)
+					while (paragraph[index + wordlen] != '\0' && paragraph[index + wordlen] != ' ' && paragraph[index+wordlen] != ',' && paragraph[index+wordlen] != '.' && paragraph[index + wordlen] != '\'' && paragraph[index + wordlen] != '\"' && paragraph[index + wordlen] != '?' && paragraph[index + wordlen] != '!')    //wordlen求单词长度(可以考虑两个两个相加)
 						wordlen++;
 					if (wordlen != keylen)
 						index += wordlen;
@@ -103,7 +105,7 @@ void chain::keymatching() {
 						int temp_index = index;
 						int worddex = 0;
 						while (worddex < wordlen) {
-							if (temp_data->data[temp_index] != keys[worddex + keyindex]) {       //有改
+							if (paragraph[temp_index] != keys[worddex + keyindex]) {       //有改
 								yn = false;
 								break;
 							}
@@ -115,6 +117,7 @@ void chain::keymatching() {
 						index += wordlen;
 					}
 				}
+
 				keyindex += keylen;
 				//for (;keys[keyindex] == ' ';keyindex++);  //过滤关键字中间的空格 
 				while(keys[keyindex] != '\0' && keys[keyindex] == ',')
@@ -158,8 +161,12 @@ void chain::keymatching() {
 			i++;
 		cout << "该文章共含关键词" << valuenum[temp_i] << "个" << endl;
 		store_data_node * temp_data_head = temp_head->htree.head;
+		// for (;temp_data_head != NULL;temp_data_head = temp_data_head->right)
+		// 	cout << "  " << temp_data_head->data << endl;
 		for (;temp_data_head != NULL;temp_data_head = temp_data_head->right)
-			cout << "  " << temp_data_head->data << endl;
+		{
+			cout << "  " << temp_data_head->decompress(temp_data_head->data) << endl;
+		}
 		cout << "全文输出完毕" << endl;
 
 	}
@@ -199,6 +206,7 @@ void chain:: addNodeFromFile_thread(int begin,int end,queue<read_for_thread>* in
 			passage += temp+'\n';
 		}
 		in.close();
+		passage.pop_back();
 		read_for_thread temp_store;
 		temp_store.time = time;
 		temp_store.passage = passage;
@@ -209,6 +217,7 @@ void chain:: addNode_from_queue(queue<read_for_thread>& info_queue)
 {
 	while(!info_queue.empty())
 	{
+		//cout<<info_queue.front().time<<endl;
 		addNode(info_queue.front().passage,info_queue.front().time);
 		info_queue.pop();
 	}
