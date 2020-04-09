@@ -2,11 +2,13 @@
 #include <iostream>
 #include <conio.h>
 #include "Blockchain.h"
+#include "userManager.h"
 using namespace std;
 class UI
 {
 public:
 	chain block_chain;
+	userManager usermanager;//Ä£ÄâÓÃ»§¶Ë
 	void default_set();
 	void header();
 	void footer();

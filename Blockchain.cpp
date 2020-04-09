@@ -2,15 +2,16 @@
 
 #include "Blockchain.h"
 
-node::node(string info, string time)
+node::node(string info, string time,string mac)
 {
 	htree.createTree(info);
 	next = NULL;
 	preHashCode = "";
 	timeStamp = time;
+	this->mac = mac;
 }
 
-void chain::addNode(string info, string time)
+void chain::addNode(string info, string time,string mac)
 {
 	if (!head)
 	{
@@ -19,7 +20,7 @@ void chain::addNode(string info, string time)
 	}
 	else
 	{
-		node* newNode = new node(info, time);
+		node* newNode = new node(info, time, mac);
 		newNode->preHashCode = rear->htree.root->hashCode;
 		rear->next = newNode;
 		rear = rear->next;

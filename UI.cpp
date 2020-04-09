@@ -61,7 +61,14 @@ void UI::store_news()
 	cin>>data;
 	cout<<"请输入文章:"<<endl;
 	passage = read_passage();
-	block_chain.addNode(passage,data);
+	int juge = usermanager.sendMessageBySignal(passage,data);
+	if(!juge)
+	{
+		cout<<"身份认证失败或信息已被篡改，请核查无误后再进行发送!"<<endl;
+		_getch();
+		return;
+	}
+	block_chain.addNode(passage,data,usermanager.getMac());
 	cout<<"存储完成!"<<endl;
 }
 string UI::read_passage()
@@ -100,4 +107,5 @@ void UI::key_search()
 void UI::default_set()
 {
 	block_chain.addNodeFromFile();
+	usermanager.userLogin();
 }

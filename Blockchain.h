@@ -1,8 +1,6 @@
 #pragma once
 
 #include <iostream>
-#pragma once
-
 #include "md5.h"
 #include "hashTree.h"
 #include <fstream>
@@ -18,20 +16,20 @@ struct read_for_thread
 class node
 {
 public:
-	node(string info, string time);
+	node(string info, string time,string mac="");
 	hashTree htree;//此结点的哈希树
 	string preHashCode;//上一个哈希结点的哈希值
 	string timeStamp;//时间戳
 	node* next;
+	string mac;//记录上传者mac地址以溯源
 };
 class chain
 {
-	
 public:
 	node* head, * rear;
 	MD5_hash md5;//哈希函数
 	chain() { head = rear = NULL; }
-	void addNode(string info, string time);//添加区块结点
+	void addNode(string info, string time,string mac="");//添加区块结点
 	void goOverChain();//debug用
 	string retMd5(string info);
 	void findChanged(string passage, string time);//找到篡改段落
