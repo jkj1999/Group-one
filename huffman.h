@@ -29,5 +29,4 @@ public:
 	string uncompress(string hufpassage);//解压缩
 	int return_start(int& a, int& b, int& c, string m);//将存在字符串m的前三个整数取出来，放在变量a，b，c中，并返回被压缩数据的首地址
 };
-
 //int return_start(int& a, int& b, int& c, string m);//将存在字符串m的前三个整数取出来，放在变量a，b，c中，并返回被压缩数据的首地址

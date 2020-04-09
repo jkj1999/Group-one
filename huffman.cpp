@@ -2,7 +2,6 @@
 
 string HFM::compress(string passage)
 {
-	//cout << passage<<endl;
 	string compress_passage;
 
 	int node_number = 0;   //节点数(字符种类数)
@@ -195,40 +194,46 @@ string HFM::uncompress(string hufpassage)
 	else {
 		len = total / 8 + 1;
 	}
+  //解码
+	HFM_node* head;
+	//先读取一次
+	char ch = hufpassage[p];
+	for (int i = 1; i <= 8; i++) {
+		if (ch & 1)
+			binary[i] = 1;
+		else
+			binary[i] = 0;
+		ch = ch >> 1;
+	}
 
-	for (int i = 0; i < len; i++)
-	{
-		char ch = hufpassage[p + i];
-		int t[10];
-		for (int i = 1; i <= 8; i++) {
-			if (ch & 1)
-				t[i] = 1;
+	int couts = 8;
+	for (int i = 0; i < ch_num; i++) {
+
+		head = &huf[2*number-2];
+
+		while (1) {
+			if (binary[couts])    //左为 0  右为 1
+				head = head->right;
 			else
-				t[i] = 0;
-			ch = ch >> 1;
-		}
-		//读出来为反序,需要逆序
-		for (int i = 1; i <= 8; i++)
-			binary[i] = t[9 - i];
+				head = head->left;
 
-		for (int j = 1; j <= 8; j++)
-		{
-			if (binary[j] == 0)
-				temp += "0";
-			else if (binary[j] == 1)
-				temp += "1";
-			for (int k = 0; k < number; k++)
-			{
-				if (temp == huf[k].binary) {
-					outcome += huf[k].data;
-					ch_num--;
-					if (ch_num == 0)
-					{
-						return outcome;
-					}
-					temp = "";
-					break;
+			couts--;
+
+			if (!couts) {   //再次读取
+				ch = hufpassage[++p];
+				for (int i = 1; i <= 8; i++) {
+					if (ch & 1)
+						binary[i] = 1;
+					else
+						binary[i] = 0;
+					ch = ch >> 1;
 				}
+				couts = 8;
+			}
+
+			if (head->data != '\0') {
+				outcome += head->data;
+				break;
 			}
 		}
 	}

@@ -79,7 +79,7 @@ void chain::keymatching() {
 	node* temp_head = head;
 	int news_num = 0;                         //记录文章下标(起始为0)
 	for (;temp_head != NULL;temp_head = temp_head->next) {      //求每篇文章的关键词个数
-		cout<<temp_head->timeStamp<<endl;
+		//cout<<temp_head->timeStamp<<endl;
 		store_data_node* temp_data = temp_head->htree.head;     //指向底层结点
 		int count = 0;
 		for (;temp_data != NULL;temp_data = temp_data->right) {       //得到count
@@ -88,9 +88,9 @@ void chain::keymatching() {
 			for (;temp_keynum > 0;temp_keynum--) {                         //分别求temp_keynum个关键字的个数 
 				//cout << count << endl;
 				int keylen = 0;
+				string paragraph = temp_data->decompress(temp_data->data);//将文章解压
 				for (;keys[keylen + keyindex] != '\0' && keys[keylen + keyindex] != ',';keylen++);      //求字符串key的长度
 				int index = 0, wordlen = 0;           //index是文章当前位置，count是出现次数，wordlen是文章中指向的单词长度
-				string paragraph = temp_data->decompress(temp_data->data);//将文章解压
 				while (paragraph[index] != '\0') {
 					wordlen = 0;
 					bool yn;                            //单词与关键词是否相等 
@@ -171,6 +171,7 @@ void chain::keymatching() {
 
 	}
 }
+
 void chain::addNodeFromFile()
 {
 	queue<read_for_thread> info_one,info_two,info_three,info_four;
